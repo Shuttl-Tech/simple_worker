@@ -12,13 +12,15 @@ class Queue:
 
     def reserve_task(self):
         """
-        Reserves a task from the queue.
-
-        Returns a tuple of (task_id, task).
+        Reserves a task from the queue, returns a tuple of (task_id, task).
 
         task_id can be used to `ack` the task after processing
         """
-        message_id, message = self._provider.reserve_one(self.name)
+        reserved = self._provider.reserve_one(self.name)
+        if not reserved:
+            return None
+
+        message_id, message = reserved
         task_id, task = message_id, deserialize(message)
         return task_id, task
 

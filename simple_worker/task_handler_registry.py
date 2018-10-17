@@ -16,8 +16,11 @@ class TaskHandlerRegistry():
 
         self.data[task_name] = handler_fn
 
+    def has_handler_for(self, task_name):
+        return task_name in self.data
+
     def get(self, task_name):
-        if task_name not in self.data:
+        if not self.has_handler_for(task_name):
             raise TaskHandlerNotFound(task_name)
 
         return self.data[task_name]
