@@ -5,19 +5,19 @@ class Worker:
         self._task_handler_registry = task_handler_registry
         self._shutdown_signal_received = False
 
-    def register_on_boot_handler():
+    def register_on_boot_handler(self):
         pass
 
-    def register_on_shutdown_handler():
+    def register_on_shutdown_handler(self):
         pass
 
-    def register_on_task_start_handler():
+    def register_on_task_start_handler(self):
         pass
 
-    def register_on_task_end_handler():
+    def register_on_task_end_handler(self):
         pass
 
-    def register_on_task_failure_handler():
+    def register_on_task_failure_handler(self):
         pass
 
     def start(self):
@@ -25,10 +25,13 @@ class Worker:
             self._worker_loop()
 
     def _worker_loop(self):
-        for queue in self.queues:
+        for queue in self._queues:
             reserved = queue.reserve_task()
             if not reserved:
                 continue
+
+        if not reserved:
+            return
 
         task_id, task = reserved
 

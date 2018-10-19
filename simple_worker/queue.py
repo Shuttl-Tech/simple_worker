@@ -46,7 +46,7 @@ class Queue:
         pass
 
 
-def serialize(task):
+def serialize(task: Task):
     return {'task_name': task.name, 'task_payload': task.payload}
 
 
