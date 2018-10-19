@@ -16,16 +16,20 @@ class SQSProvider():
         pass
 
 
+class MessageIDNotFound(Exception):
+    pass
+
+
 class MemoryProvider():
     def __init__(self):
         self._mem_queues = {}
 
-    def add(self, queue_name, message):
+    def add(self, queue_name: str, message: str):
         pending, _reserved = self._get_or_create_queues(queue_name)
         message_id = uuid4()
         pending.append({'id': message_id, 'message': message})
 
-    def reserve_one(self, queue_name):
+    def reserve_one(self, queue_name: str) -> (str, str):
         pending, reserved = self._get_or_create_queues(queue_name)
         if not pending:
             return None
@@ -36,8 +40,11 @@ class MemoryProvider():
 
         return message_id, message
 
-    def ack(self, queue_name, message_id):
+    def ack(self, queue_name: str, message_id: str):
         pending, reserved = self._get_or_create_queues(queue_name)
+        if message_id not in reserved:
+            raise MessageIDNotFound(message_id)
+
         del reserved[message_id]
 
     def _get_or_create_queues(self, queue_name):

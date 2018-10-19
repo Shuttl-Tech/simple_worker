@@ -39,9 +39,6 @@ class App:
         queue_name = self._task_router.get_queue_for_task(task_name)
         self.get_queue(queue_name).add_task(task_name, payload)
 
-    def get_queue(self, queue_name):
-        return Queue(self._queue_provider, queue_name)
-
     def process_tasks(self,
                       queue_names=None,
                       task_executor_cls=None,
@@ -55,6 +52,9 @@ class App:
             task_handler_registry=self._task_handler_registry,
             task_executor_cls=task_executor_cls)
         worker.start()
+
+    def get_queue(self, queue_name):
+        return Queue(self._queue_provider, queue_name)
 
 
 def provider_from_broker_url(broker_url):
