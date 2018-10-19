@@ -1,3 +1,11 @@
+from simple_worker.task import Task
+from simple_worker.queue_providers import MessageIDNotFound
+
+
+class TaskIDNotFound(Exception):
+    pass
+
+
 class Queue:
     def __init__(self, provider, queue_name):
         self._provider = provider
@@ -26,7 +34,10 @@ class Queue:
 
     def ack_task(self, task_id):
         message_id = task_id
-        self._provider.ack(self.name, message_id)
+        try:
+            self._provider.ack(self.name, message_id)
+        except MessageIDNotFound:
+            raise TaskIDNotFound
 
     def get_pending_task_count(self):
         pass
