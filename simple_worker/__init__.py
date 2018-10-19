@@ -1,14 +1,16 @@
-from simple_worker.task_handler_registry import TaskHandlerRegistry, \
-        TaskHandlerNotFound
+from simple_worker.task_handler_registry import TaskHandlerRegistry
+from simple_worker.task_handler_registry import TaskHandlerNotFound
+from simple_worker.task_router import TaskRouter
 from simple_worker.queue import Queue
 from simple_worker.worker import Worker
 from simple_worker.queue_providers import MemoryProvider
+from simple_worker.task import Task
 
 
 class App:
-    def __init__(self, broker_url):
+    def __init__(self, broker_url: str):
         self._task_handler_registry = TaskHandlerRegistry()
-        self._task_router = {}
+        self._task_router = TaskRouter()
         self._queue_provider = provider_from_broker_url(broker_url)
 
     def register_task_handler(self, task_name, queue='default'):
@@ -36,8 +38,10 @@ class App:
         if not self._task_handler_registry.has_handler_for(task_name):
             raise TaskHandlerNotFound(task_name)
 
+        task = Task(name=task_name, payload=payload)
+
         queue_name = self._task_router.get_queue_for_task(task_name)
-        self.get_queue(queue_name).add_task(task_name, payload)
+        self._get_queue(queue_name).add_task(task)
 
     def process_tasks(self,
                       queue_names=None,
@@ -46,14 +50,14 @@ class App:
         if not queue_names:
             queue_names = set(self._task_router.values())
 
-        queues = [self.get_queue(queue_name) for queue_name in queue_names]
+        queues = [self._get_queue(queue_name) for queue_name in queue_names]
         worker = Worker(
             queues=queues,
             task_handler_registry=self._task_handler_registry,
             task_executor_cls=task_executor_cls)
         worker.start()
 
-    def get_queue(self, queue_name):
+    def _get_queue(self, queue_name):
         return Queue(self._queue_provider, queue_name)
 
 
@@ -61,4 +65,4 @@ def provider_from_broker_url(broker_url):
     if broker_url.startswith('memory://'):
         return MemoryProvider()
     else:
-        raise RuntimeError("Invalid broker_url: " + broker_url)
+        raise ValueError("Invalid broker_url: " + broker_url)
