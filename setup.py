@@ -10,5 +10,4 @@ setup(
     license='MIT',
     packages=['simple_worker'],
     classifiers=["Programming Language :: Python :: 3.7"],
-    install_requires=['boto3'],
-    tests_requires=['pytest', 'pdb'])
+    install_requires=['boto3'])
