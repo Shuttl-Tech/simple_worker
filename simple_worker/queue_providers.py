@@ -29,7 +29,7 @@ class MemoryProvider():
         message_id = uuid4()
         pending.append({'id': message_id, 'message': message})
 
-    def reserve_one(self, queue_name: str) -> (str, str):
+    def reserve_one(self, queue_name: str):
         pending, reserved = self._get_or_create_queues(queue_name)
         if not pending:
             return None
@@ -46,6 +46,14 @@ class MemoryProvider():
             raise MessageIDNotFound(message_id)
 
         del reserved[message_id]
+
+    def get_pending_message_count(self, queue_name) -> int:
+        pending, reserved = self._get_or_create_queues(queue_name)
+        return len(pending)
+
+    def get_in_progress_message_count(self, queue_name) -> int:
+        pending, reserved = self._get_or_create_queues(queue_name)
+        return len(reserved)
 
     def _get_or_create_queues(self, queue_name):
         if queue_name not in self._mem_queues:

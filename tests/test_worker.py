@@ -25,20 +25,48 @@ def test_start_and_shutdown(worker: Worker):
 
 
 def test_performs_tasks(queue: Queue, worker_thread: threading.Thread):
-    task_handler_invocations.clear()
+    success_task_invocations.clear()
 
-    task = Task(name='task1', payload={'a': 1, 'b': 2})
+    task = Task(name='task_success', payload={'a': 1, 'b': 2})
     queue.add_task(task)
 
     time.sleep(0.01)
-    assert task_handler_invocations == [[1, 2]]
+    assert success_task_invocations == [[1, 2]]
+
+    assert queue.get_pending_task_count() == 0
+    assert queue.get_in_progress_task_count() == 0
 
 
-task_handler_invocations = []
+def test_does_not_ack_failed_tasks(queue: Queue,
+                                   worker_thread: threading.Thread):
+    failure_task_invocations.clear()
+
+    task = Task(name='task_failure', payload={'a': 1, 'b': 2})
+    queue.add_task(task)
+
+    time.sleep(0.01)
+    assert failure_task_invocations == [[1, 2]]
+
+    # The task should be reserved, so no pending tasks should be present
+    assert queue.get_pending_task_count() == 0
+
+    # Since the task wasn't acked, it should still be 'in-progress'.
+    assert queue.get_in_progress_task_count() == 1
 
 
-def dummy_task_handler(a, b):
-    task_handler_invocations.append([a, b])
+success_task_invocations = []
+
+
+def success_task_handler(a, b):
+    success_task_invocations.append([a, b])
+
+
+failure_task_invocations = []
+
+
+def failure_task_handler(a, b):
+    failure_task_invocations.append([a, b])
+    raise RuntimeError('task failed')
 
 
 @pytest.fixture
@@ -49,7 +77,8 @@ def queue():
 @pytest.fixture
 def worker(queue, task_handler_registry=None):
     task_handler_registry = TaskHandlerRegistry()
-    task_handler_registry.register('task1', dummy_task_handler)
+    task_handler_registry.register('task_success', success_task_handler)
+    task_handler_registry.register('task_failure', failure_task_handler)
 
     return Worker(
         queues=[queue],

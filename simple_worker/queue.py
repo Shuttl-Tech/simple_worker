@@ -40,10 +40,10 @@ class Queue:
             raise TaskIDNotFound
 
     def get_pending_task_count(self):
-        pass
+        return self._provider.get_pending_message_count(self.name)
 
     def get_in_progress_task_count(self):
-        pass
+        return self._provider.get_in_progress_message_count(self.name)
 
 
 def serialize(task: Task):
