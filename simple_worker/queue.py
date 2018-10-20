@@ -1,3 +1,5 @@
+import json
+
 from simple_worker.task import Task
 from simple_worker.queue_providers import MessageIDNotFound
 
@@ -47,8 +49,9 @@ class Queue:
 
 
 def serialize(task: Task):
-    return {'task_name': task.name, 'task_payload': task.payload}
+    return json.dumps({'task_name': task.name, 'task_payload': task.payload})
 
 
 def deserialize(message):
-    return Task(name=message['task_name'], payload=message['task_payload'])
+    dikt = json.loads(message)
+    return Task(name=dikt['task_name'], payload=dikt['task_payload'])
