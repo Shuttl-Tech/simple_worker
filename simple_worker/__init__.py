@@ -43,19 +43,15 @@ class App:
         queue_name = self._task_router.get_queue_for_task(task_name)
         self._get_queue(queue_name).add_task(task)
 
-    def process_tasks(self,
-                      queue_names=None,
-                      task_executor_cls=None,
-                      max_tasks=None):
+    def worker(self, queue_names=None, task_executor_cls=None, max_tasks=None):
         if not queue_names:
-            queue_names = set(self._task_router.values())
+            queue_names = set(self._task_router.get_all_queues())
 
         queues = [self._get_queue(queue_name) for queue_name in queue_names]
-        worker = Worker(
+        return Worker(
             queues=queues,
             task_handler_registry=self._task_handler_registry,
             task_executor_cls=task_executor_cls)
-        worker.start()
 
     def _get_queue(self, queue_name):
         return Queue(self._queue_provider, queue_name)

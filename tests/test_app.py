@@ -4,6 +4,7 @@ from simple_worker import App
 from simple_worker.task_handler_registry import TaskHandlerAlreadyRegistered
 from simple_worker.task_handler_registry import TaskHandlerNotFound
 from simple_worker.queue_providers import MemoryProvider, SQSProvider
+from simple_worker.worker import Worker
 
 
 def test_app_rejects_invalid_broker_url():
@@ -51,6 +52,10 @@ def test_add_task(app_with_task):
 @pytest.mark.skip(reason='Not implemented')
 def test_add_task_validates_signature():
     pass
+
+
+def test_worker(app):
+    assert isinstance(app.worker(), Worker)
 
 
 @pytest.fixture
