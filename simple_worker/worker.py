@@ -25,20 +25,33 @@ class Worker:
             self._worker_loop()
 
     def _worker_loop(self):
+        reserved = self._reserve_one()
+        if not reserved:
+            return
+
+        queue, task_id, task = reserved
+
+        task_handler_fn = self._task_handler_registry.get(task.name)
+        executor = self._task_executor_cls(task_handler_fn)
+        is_success, exc = executor.execute(task)
+
+        if not is_success:
+            # Log out the exception
+            # Queue for retrial?
+            pass
+        else:
+            queue.ack_task(task_id)
+
+    def _reserve_one(self):
         for queue in self._queues:
             reserved = queue.reserve_task()
             if not reserved:
                 continue
 
-        if not reserved:
-            return
-
-        task_id, task = reserved
-
-        task_handler_fn = self.task_handler_registry[task.name]
-        self._task_executor_cls().execute(task.payload, task_handler_fn)
-
-        queue.ack_task(task_id)
+        if reserved:
+            return (queue, *reserved)
+        else:
+            return None
 
     def shutdown(self):
         self._shutdown_signal_received = True
