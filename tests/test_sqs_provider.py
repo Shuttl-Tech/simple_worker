@@ -26,6 +26,8 @@ def test_add_and_reserve(provider):
     # SQS doesn't guarantee order, let's check after sorting
     assert sorted(messages) == sorted(['msg1', 'msg2'])
 
+    assert provider.reserve_one('dummy_queue') is None
+
 
 @pytest.mark.integration
 def test_queue_not_found_error(provider):

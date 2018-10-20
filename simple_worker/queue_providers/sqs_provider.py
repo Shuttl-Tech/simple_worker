@@ -18,7 +18,7 @@ class SQSProvider():
         resp = self.client.receive_message(
             QueueUrl=self._get_queue_url(queue_name))
 
-        if not resp['Messages']:
+        if 'Messages' not in resp:
             return None
         else:
             assert len(resp['Messages']) == 1
