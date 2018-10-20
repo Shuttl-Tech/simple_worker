@@ -5,7 +5,7 @@ from .exceptions import MessageIDNotFound
 
 
 class MemoryProvider():
-    def __init__(self):
+    def __init__(self, queue_prefix):
         self._mem_queues = {}
 
     def add(self, queue_name: str, message: str):

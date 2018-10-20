@@ -3,15 +3,15 @@ from simple_worker.task_handler_registry import TaskHandlerNotFound
 from simple_worker.task_router import TaskRouter
 from simple_worker.queue import Queue
 from simple_worker.worker import Worker
-from simple_worker.queue_providers import MemoryProvider
+from simple_worker.queue_providers import MemoryProvider, SQSProvider
 from simple_worker.task import Task
 
 
 class App:
-    def __init__(self, broker_url: str):
+    def __init__(self, broker_url: str, queue_prefix: str = ''):
         self._task_handler_registry = TaskHandlerRegistry()
         self._task_router = TaskRouter()
-        self._queue_provider = provider_from_broker_url(broker_url)
+        self._queue_provider = _get_provider(broker_url, queue_prefix)
 
     def register_task_handler(self, task_name, queue='default'):
         """
@@ -61,8 +61,10 @@ class App:
         return Queue(self._queue_provider, queue_name)
 
 
-def provider_from_broker_url(broker_url):
+def _get_provider(broker_url, queue_prefix):
     if broker_url.startswith('memory://'):
-        return MemoryProvider()
+        return MemoryProvider(queue_prefix=queue_prefix)
+    elif broker_url.startswith('sqs://'):
+        return SQSProvider(queue_prefix=queue_prefix)
     else:
         raise ValueError("Invalid broker_url: " + broker_url)

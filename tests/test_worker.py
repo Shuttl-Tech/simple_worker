@@ -71,7 +71,8 @@ def failure_task_handler(a, b):
 
 @pytest.fixture
 def queue():
-    return Queue(provider=MemoryProvider(), queue_name='dummy_queue')
+    return Queue(
+        provider=MemoryProvider(queue_prefix=''), queue_name='dummy_queue')
 
 
 @pytest.fixture

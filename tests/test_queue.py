@@ -59,4 +59,4 @@ def test_add_reserve_ack_multiple(queue):
 
 @pytest.fixture
 def queue():
-    return Queue(MemoryProvider(), 'dummy_queue_name')
+    return Queue(MemoryProvider(queue_prefix=''), 'dummy_queue_name')
