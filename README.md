@@ -12,7 +12,7 @@ tasks asynchronously.
 You'll need to setup at least one SQS queue:
 
 ```bash
-aws-cli create-queue
+aws sqs create-queue --queue-name your-prefix-default
 ```
 
 ### Basic Usage
@@ -22,7 +22,7 @@ Initialize the app and task handlers:
 ```python
 from simple_worker import App
 
-app = App.init(broker_url='sqs://yo@yo:')
+app = App.init(broker_url='sqs://yo@yo:', queue_prefix='your-prefix-')
 
 @app.register_task_handler('my_task')
 def my_task_handler(a, b):
