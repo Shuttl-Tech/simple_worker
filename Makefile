@@ -7,6 +7,7 @@ integration_test:
 	pytest -m 'integration' tests
 
 build:
+	rm dist/*
 	python setup.py sdist bdist_wheel
 
 upload: build
