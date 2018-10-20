@@ -1,6 +1,6 @@
 import boto3
 
-from .exceptions import MessageIDNotFound
+from .exceptions import MessageIDNotFound, QueueNotFound
 
 from botocore.exceptions import ClientError
 
@@ -39,5 +39,13 @@ class SQSProvider():
 
     def _get_queue_url(self, queue_name):
         full_queue_name = self.queue_prefix + queue_name
-        resp = self.client.get_queue_url(QueueName=full_queue_name)
+        try:
+            resp = self.client.get_queue_url(QueueName=full_queue_name)
+        except ClientError as e:
+            error_code = 'AWS.SimpleQueueService.NonExistentQueue'
+            if e.response['Error']['Code'] == error_code:
+                raise QueueNotFound(full_queue_name)
+            else:
+                raise e
+
         return resp['QueueUrl']

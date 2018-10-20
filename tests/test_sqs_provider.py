@@ -5,7 +5,7 @@ import random
 import string
 
 from simple_worker.queue_providers import SQSProvider
-from simple_worker.queue_providers.exceptions import MessageIDNotFound
+from simple_worker.queue_providers.exceptions import MessageIDNotFound, QueueNotFound
 
 CREDS_FILE = os.path.join(os.getcwd(), 'tests', '.aws_credentials')
 
@@ -28,18 +28,15 @@ def test_add_and_reserve(provider):
 
 
 @pytest.mark.integration
-def test_ack(provider):
+def test_queue_not_found_error(provider):
     with pytest.raises(MessageIDNotFound):
         provider.ack('dummy_queue', 'invalid')
 
-    provider.add('dummy_queue', 'msg1')
-    provider.add('dummy_queue', 'msg2')
 
-    message_id, message = provider.reserve_one('dummy_queue')
-    provider.ack('dummy_queue', message_id)
-
-    message_id, message = provider.reserve_one('dummy_queue')
-    provider.ack('dummy_queue', message_id)
+@pytest.mark.integration
+def test_ack(provider):
+    with pytest.raises(QueueNotFound):
+        provider.ack('inexistent_queue', 'invalid')
 
 
 @pytest.fixture
