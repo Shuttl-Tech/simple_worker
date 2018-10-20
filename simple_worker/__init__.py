@@ -5,6 +5,7 @@ from simple_worker.queue import Queue
 from simple_worker.worker import Worker
 from simple_worker.queue_providers import MemoryProvider, SQSProvider
 from simple_worker.task import Task
+from simple_worker.task_executor import TaskExecutor
 
 
 class App:
@@ -43,9 +44,12 @@ class App:
         queue_name = self._task_router.get_queue_for_task(task_name)
         self._get_queue(queue_name).add_task(task)
 
-    def worker(self, queue_names=None, task_executor_cls=None, max_tasks=None):
+    def worker(self, queue_names=None, task_executor_cls=None):
         if not queue_names:
             queue_names = set(self._task_router.get_all_queues())
+
+        if task_executor_cls is None:
+            task_executor_cls = TaskExecutor
 
         queues = [self._get_queue(queue_name) for queue_name in queue_names]
         return Worker(
