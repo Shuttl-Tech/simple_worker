@@ -12,21 +12,6 @@ class Worker:
         self._task_handler_registry = task_handler_registry
         self._shutdown_signal_received = False
 
-    def register_on_boot_handler(self):
-        pass
-
-    def register_on_shutdown_handler(self):
-        pass
-
-    def register_on_task_start_handler(self):
-        pass
-
-    def register_on_task_end_handler(self):
-        pass
-
-    def register_on_task_failure_handler(self):
-        pass
-
     def start(self):
         while not self._shutdown_signal_received:
             self._worker_loop()
