@@ -1,0 +1,2 @@
+class MessageIDNotFound(Exception):
+    pass
