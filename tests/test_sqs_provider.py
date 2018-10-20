@@ -10,6 +10,7 @@ from simple_worker.queue_providers.exceptions import MessageIDNotFound
 CREDS_FILE = os.path.join(os.getcwd(), 'tests', '.aws_credentials')
 
 
+@pytest.mark.integration
 def test_add_and_reserve(provider):
     provider.add('dummy_queue', 'msg1')
     provider.add('dummy_queue', 'msg2')
@@ -26,6 +27,7 @@ def test_add_and_reserve(provider):
     assert sorted(messages) == sorted(['msg1', 'msg2'])
 
 
+@pytest.mark.integration
 def test_ack(provider):
     with pytest.raises(MessageIDNotFound):
         provider.ack('dummy_queue', 'invalid')
