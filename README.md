@@ -85,6 +85,29 @@ For testing, an in-memory queue implementation is available. Init the app with
 the following `broker_url` to activate it: "memory://localhost". When used, any
 tasks created on the same app will be available for consumption by workers.
 
+**Task Execution Context**
+
+By default, the `simple_worker.TaskExecutor` class is used to run tasks. This
+class can be subclassed to wrap a task in an application-specific context.
+For example, maybe you want a task to run in the context of your flask
+application so that it can re-use all the app initialization logic.
+
+```python
+from simple_worker import TaskExecutor
+from simple_worker import App
+
+app = App()
+
+class FlaskContextTaskExecutor(TaskExecutor):
+    @contextmanager
+    def context(self):
+        with flask_app.app_context():
+            yield
+
+worker = app.worker(task_executor_cls=FlaskContextTaskExecutor)
+worker.start()
+```
+
 **Catching errors during development**
 
 **TODO**
