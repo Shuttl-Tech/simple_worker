@@ -25,7 +25,7 @@ class Worker:
 
         task_handler_fn = self._task_handler_registry.get(task.name)
         executor = self._task_executor_cls(task_handler_fn)
-        is_success, exc = executor.execute(task)
+        is_success = executor.execute(task)
 
         if is_success:
             # We only ack tasks if they were succesfully processed. Retrying
@@ -33,19 +33,6 @@ class Worker:
             # that tasks that were received but not acked are resurfaced to
             # consumers.
             queue.ack_task(task_id)
-        else:
-            self._log_exc(task, task_id, exc)
-
-    def _log_exc(task, task_id, exc):
-        # TODO: Add attempt count?
-        logger.error(
-            "Task raised exception, will be retried by queue",
-            extra={
-                'exc': str(exc),
-                'task_id': task_id,
-                'task_name': task.name,
-                'task_payload': json.dumps(task.payload)
-            })
 
     def _reserve_one(self):
         for queue in self._queues:
