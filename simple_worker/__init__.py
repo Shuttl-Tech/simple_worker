@@ -9,10 +9,14 @@ from simple_worker.task_executor import TaskExecutor
 
 
 class App:
-    def __init__(self, broker_url: str, queue_prefix: str = ''):
+    def __init__(self, queue_prefix: str = '', testing_mode: bool = False):
         self._task_handler_registry = TaskHandlerRegistry()
         self._task_router = TaskRouter()
-        self._queue_provider = _get_provider(broker_url, queue_prefix)
+
+        if testing_mode:
+            self._queue_provider = MemoryProvider(queue_prefix=queue_prefix)
+        else:
+            self._queue_provider = SQSProvider(queue_prefix=queue_prefix)
 
     def register_task_handler(self, task_name, queue='default'):
         """
@@ -59,12 +63,3 @@ class App:
 
     def _get_queue(self, queue_name):
         return Queue(self._queue_provider, queue_name)
-
-
-def _get_provider(broker_url, queue_prefix):
-    if broker_url.startswith('memory://'):
-        return MemoryProvider(queue_prefix=queue_prefix)
-    elif broker_url.startswith('sqs://'):
-        return SQSProvider(queue_prefix=queue_prefix)
-    else:
-        raise ValueError("Invalid broker_url: " + broker_url)

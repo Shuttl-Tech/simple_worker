@@ -7,19 +7,14 @@ from simple_worker.queue_providers import MemoryProvider, SQSProvider
 from simple_worker.worker import Worker
 
 
-def test_app_rejects_invalid_broker_url():
-    with pytest.raises(ValueError):
-        App(broker_url='dummy')
-
-
-def test_init_with_memory_provider():
-    app = App(broker_url='memory://')
-    assert isinstance(app._queue_provider, MemoryProvider)
-
-
-def test_init_with_sqs_provider():
-    app = App(broker_url='sqs://')
+def test_init():
+    app = App()
     assert isinstance(app._queue_provider, SQSProvider)
+
+
+def test_init_with_testing_mode():
+    app = App(testing_mode=True)
+    assert isinstance(app._queue_provider, MemoryProvider)
 
 
 @pytest.mark.skip(reason='paul is lazy')
@@ -60,7 +55,7 @@ def test_worker(app):
 
 @pytest.fixture
 def app():
-    return App('memory://dummy')
+    return App(testing_mode=True)
 
 
 @pytest.fixture

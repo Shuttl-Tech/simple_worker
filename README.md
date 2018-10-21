@@ -22,7 +22,7 @@ Initialize the app and task handlers:
 ```python
 from simple_worker import App
 
-app = App.init(broker_url='sqs://yo@yo:', queue_prefix='your-prefix-')
+app = App.init(queue_prefix='your-prefix-')
 
 @app.register_task_handler('my_task')
 def my_task_handler(a, b):
@@ -36,7 +36,7 @@ Produce tasks:
 app.add_task('my_task', {'a': 1, 'b': 2})
 ```
 
-To consume tasks:
+Consume tasks:
 
 ```python
 app.worker().start()
