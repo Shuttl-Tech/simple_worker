@@ -6,9 +6,9 @@ from botocore.exceptions import ClientError
 
 
 class SQSProvider():
-    def __init__(self, queue_prefix):
+    def __init__(self, queue_prefix, endpoint_url=None):
         self.queue_prefix = queue_prefix
-        self.client = boto3.client('sqs')
+        self.client = boto3.client('sqs', endpoint_url=endpoint_url)
 
     def add(self, queue_name: str, message: str):
         self.client.send_message(

@@ -9,14 +9,22 @@ from simple_worker.task_executor import TaskExecutor
 
 
 class App:
-    def __init__(self, queue_prefix: str = '', testing_mode: bool = False):
+    def __init__(self, queue_prefix: str = '', testing_mode: bool = False,
+                 sqs_endpoint_url=None):
+        """
+        `sqs_endpoint_url`: override to use mock server.
+                            eg. sqs implementation by moto-server 
+        """
         self._task_handler_registry = TaskHandlerRegistry()
         self._task_router = TaskRouter()
 
         if testing_mode:
             self._queue_provider = MemoryProvider(queue_prefix=queue_prefix)
         else:
-            self._queue_provider = SQSProvider(queue_prefix=queue_prefix)
+            self._queue_provider = SQSProvider(
+                queue_prefix=queue_prefix,
+                endpoint_url=sqs_endpoint_url
+            )
 
     def register_task_handler(self, task_name, queue='default'):
         """
