@@ -55,7 +55,7 @@ def my_task_handler(a, b):
 Produce tasks:
 
 ```python
-app.add_task('my_task', {'a': 1, 'b': 2})
+app.add_task('my_task', **{'a': 1, 'b': 2})
 ```
 
 Consume tasks:
