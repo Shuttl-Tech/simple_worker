@@ -39,6 +39,7 @@ class App:
         def f(handler_fn):
             self._task_handler_registry.register(task_name, handler_fn)
             self._task_router.add(task_name=task_name, queue_name=queue)
+            return handler_fn
 
         return f
 
