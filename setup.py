@@ -3,7 +3,7 @@ from setuptools import find_packages
 
 setup(
     name='simple_worker',
-    version='0.2.10',
+    version='0.2.11',
     description='A task queues library that uses AWS SQS',
     url='https://github.com/shuttl-tech/simple_worker',
     author='Paul Kuruvilla',
