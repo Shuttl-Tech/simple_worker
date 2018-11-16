@@ -10,8 +10,9 @@ from simple_worker.task_executor import TaskExecutor
 
 class App:
     def __init__(self, queue_prefix: str = '', testing_mode: bool = False,
-                 sqs_endpoint_url=None):
+                 sqs_endpoint_url=None, sqs_region=None):
         """
+        `sqs_region`: aws region to use. eg. us-east-1
         `sqs_endpoint_url`: override to use mock server.
                             eg. sqs implementation by moto-server 
         """
@@ -23,7 +24,8 @@ class App:
         else:
             self._queue_provider = SQSProvider(
                 queue_prefix=queue_prefix,
-                endpoint_url=sqs_endpoint_url
+                endpoint_url=sqs_endpoint_url,
+                aws_region=sqs_region
             )
 
     def register_task_handler(self, task_name, queue='default'):
