@@ -17,7 +17,10 @@ class SQSProvider():
 
     def reserve_one(self, queue_name):
         resp = self.client.receive_message(
-            QueueUrl=self._get_queue_url(queue_name))
+            QueueUrl=self._get_queue_url(queue_name),
+            # TODO, FIXME: wait for ReceiveMessageWaitTimeSeconds implementation patch in moto lib
+            WaitTimeSeconds=5
+        )
 
         if 'Messages' not in resp:
             return None
