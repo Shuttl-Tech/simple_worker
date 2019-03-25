@@ -1,3 +1,5 @@
+from unittest.mock import MagicMock
+
 import pytest
 import time
 
@@ -31,10 +33,30 @@ def test_performs_tasks(queue: Queue, worker_thread: threading.Thread):
     queue.add_task(task)
 
     time.sleep(0.01)
-    assert success_task_invocations == [[1, 2]]
+    assert success_task_invocations == [(1, 2)]
 
     assert queue.get_pending_task_count() == 0
     assert queue.get_in_progress_task_count() == 0
+
+
+def test_performs_tasks_multiple_queues(
+    queue: Queue, queue2: Queue, worker_thread: threading.Thread
+):
+    success_task_invocations.clear()
+
+    task = Task(name="task_success", payload={"a": 1, "b": 2})
+    task2 = Task(name="task_success", payload={"a": 3, "b": 4})
+
+    queue.add_task(task)
+    queue2.add_task(task2)
+
+    time.sleep(0.01)
+    assert set(success_task_invocations) == {(1, 2), (3, 4)}
+
+    assert queue.get_pending_task_count() == 0
+    assert queue.get_in_progress_task_count() == 0
+    assert queue2.get_pending_task_count() == 0
+    assert queue2.get_in_progress_task_count() == 0
 
 
 def test_does_not_ack_failed_tasks(queue: Queue, worker_thread: threading.Thread):
@@ -44,7 +66,7 @@ def test_does_not_ack_failed_tasks(queue: Queue, worker_thread: threading.Thread
     queue.add_task(task)
 
     time.sleep(0.01)
-    assert failure_task_invocations == [[1, 2]]
+    assert failure_task_invocations == [(1, 2)]
 
     # The task should be reserved, so no pending tasks should be present
     assert queue.get_pending_task_count() == 0
@@ -57,14 +79,14 @@ success_task_invocations = []
 
 
 def success_task_handler(a, b):
-    success_task_invocations.append([a, b])
+    success_task_invocations.append((a, b))
 
 
 failure_task_invocations = []
 
 
 def failure_task_handler(a, b):
-    failure_task_invocations.append([a, b])
+    failure_task_invocations.append((a, b))
     raise RuntimeError("task failed")
 
 
@@ -74,20 +96,25 @@ def queue():
 
 
 @pytest.fixture
-def worker(queue, task_handler_registry=None):
+def queue2():
+    return Queue(provider=MemoryProvider(queue_prefix=""), queue_name="dummy_queue2")
+
+
+@pytest.fixture
+def worker(queue, queue2, task_handler_registry=None):
     task_handler_registry = TaskHandlerRegistry()
     task_handler_registry.register("task_success", success_task_handler)
     task_handler_registry.register("task_failure", failure_task_handler)
 
     return Worker(
-        queues=[queue],
+        queues=[queue, queue2],
         task_handler_registry=task_handler_registry,
         task_executor_cls=TaskExecutor,
     )
 
 
 @pytest.fixture
-def worker_thread(worker, queue):
+def worker_thread(worker):
     def start_worker():
         worker.start()
 
