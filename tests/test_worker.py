@@ -27,7 +27,7 @@ def test_start_and_shutdown(worker: Worker):
 def test_performs_tasks(queue: Queue, worker_thread: threading.Thread):
     success_task_invocations.clear()
 
-    task = Task(name='task_success', payload={'a': 1, 'b': 2})
+    task = Task(name="task_success", payload={"a": 1, "b": 2})
     queue.add_task(task)
 
     time.sleep(0.01)
@@ -37,11 +37,10 @@ def test_performs_tasks(queue: Queue, worker_thread: threading.Thread):
     assert queue.get_in_progress_task_count() == 0
 
 
-def test_does_not_ack_failed_tasks(queue: Queue,
-                                   worker_thread: threading.Thread):
+def test_does_not_ack_failed_tasks(queue: Queue, worker_thread: threading.Thread):
     failure_task_invocations.clear()
 
-    task = Task(name='task_failure', payload={'a': 1, 'b': 2})
+    task = Task(name="task_failure", payload={"a": 1, "b": 2})
     queue.add_task(task)
 
     time.sleep(0.01)
@@ -66,25 +65,25 @@ failure_task_invocations = []
 
 def failure_task_handler(a, b):
     failure_task_invocations.append([a, b])
-    raise RuntimeError('task failed')
+    raise RuntimeError("task failed")
 
 
 @pytest.fixture
 def queue():
-    return Queue(
-        provider=MemoryProvider(queue_prefix=''), queue_name='dummy_queue')
+    return Queue(provider=MemoryProvider(queue_prefix=""), queue_name="dummy_queue")
 
 
 @pytest.fixture
 def worker(queue, task_handler_registry=None):
     task_handler_registry = TaskHandlerRegistry()
-    task_handler_registry.register('task_success', success_task_handler)
-    task_handler_registry.register('task_failure', failure_task_handler)
+    task_handler_registry.register("task_success", success_task_handler)
+    task_handler_registry.register("task_failure", failure_task_handler)
 
     return Worker(
         queues=[queue],
         task_handler_registry=task_handler_registry,
-        task_executor_cls=TaskExecutor)
+        task_executor_cls=TaskExecutor,
+    )
 
 
 @pytest.fixture

@@ -6,7 +6,7 @@ class TaskHandlerNotFound(Exception):
     pass
 
 
-class TaskHandlerRegistry():
+class TaskHandlerRegistry:
     def __init__(self):
         self.data = {}
 

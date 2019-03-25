@@ -6,7 +6,7 @@ from simple_worker.task import Task
 
 
 def test_add_and_reserve_task(queue):
-    task = Task(name='dummy_task', payload={'arg1': 'hey', 'arg2': 'hi'})
+    task = Task(name="dummy_task", payload={"arg1": "hey", "arg2": "hi"})
     queue.add_task(task)
 
     task_id, task = queue.reserve_task()
@@ -18,7 +18,7 @@ def test_reserve_when_none_available(queue):
 
 
 def test_ack(queue):
-    task = Task(name='dummy_task', payload={'arg1': 'hey', 'arg2': 'hi'})
+    task = Task(name="dummy_task", payload={"arg1": "hey", "arg2": "hi"})
     queue.add_task(task)
 
     task_id, task = queue.reserve_task()
@@ -31,9 +31,9 @@ def test_ack(queue):
 
 
 def test_add_reserve_ack_multiple(queue):
-    task1 = Task(name='dummy_task', payload={'name': 'task1'})
-    task2 = Task(name='dummy_task', payload={'name': 'task2'})
-    task3 = Task(name='dummy_task', payload={'name': 'task3'})
+    task1 = Task(name="dummy_task", payload={"name": "task1"})
+    task2 = Task(name="dummy_task", payload={"name": "task2"})
+    task3 = Task(name="dummy_task", payload={"name": "task3"})
 
     queue.add_task(task1)
     queue.add_task(task2)
@@ -59,4 +59,4 @@ def test_add_reserve_ack_multiple(queue):
 
 @pytest.fixture
 def queue():
-    return Queue(MemoryProvider(queue_prefix=''), 'dummy_queue_name')
+    return Queue(MemoryProvider(queue_prefix=""), "dummy_queue_name")

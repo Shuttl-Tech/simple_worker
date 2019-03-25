@@ -13,7 +13,7 @@ def dummy_handler_fn(x):
 def test_default_executor():
     invocations.clear()
 
-    task = Task(name='test', payload={'x': 'x'})
+    task = Task(name="test", payload={"x": "x"})
     TaskExecutor(dummy_handler_fn).execute(task)
 
     assert len(invocations) == 1
@@ -43,7 +43,7 @@ def test_executor_with_overridden_context():
     assert not executor.executor_context_started
     assert not executor.executor_context_ended
 
-    task = Task(name='test', payload={'x': 'x'})
+    task = Task(name="test", payload={"x": "x"})
     executor.execute(task)
 
     assert executor.executor_context_started

@@ -2,7 +2,7 @@ import logging
 import json
 import traceback
 
-logger = logging.getLogger('simple_worker')
+logger = logging.getLogger("simple_worker")
 
 
 class Worker:
