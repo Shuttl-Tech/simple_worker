@@ -2,7 +2,7 @@ import logging
 import json
 import traceback
 
-logger = logging.getLogger('simple_worker')
+logger = logging.getLogger("simple_worker")
 
 
 class Worker:
@@ -37,8 +37,8 @@ class Worker:
     def _reserve_one(self):
         for queue in self._queues:
             reserved = queue.reserve_task()
-            if not reserved:
-                continue
+            if reserved:
+                break
 
         if reserved:
             return (queue, *reserved)

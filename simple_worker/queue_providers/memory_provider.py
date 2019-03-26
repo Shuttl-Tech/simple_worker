@@ -4,14 +4,14 @@ from collections import deque
 from .exceptions import MessageIDNotFound
 
 
-class MemoryProvider():
+class MemoryProvider:
     def __init__(self, queue_prefix):
         self._mem_queues = {}
 
     def add(self, queue_name: str, message: str):
         pending, _reserved = self._get_or_create_queues(queue_name)
         message_id = uuid4()
-        pending.append({'id': message_id, 'message': message})
+        pending.append({"id": message_id, "message": message})
 
     def reserve_one(self, queue_name: str):
         pending, reserved = self._get_or_create_queues(queue_name)
@@ -19,7 +19,7 @@ class MemoryProvider():
             return None
 
         message_dict = pending.popleft()
-        message_id, message = message_dict['id'], message_dict['message']
+        message_id, message = message_dict["id"], message_dict["message"]
         reserved[message_id] = message
 
         return message_id, message

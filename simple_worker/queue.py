@@ -49,9 +49,9 @@ class Queue:
 
 
 def serialize(task: Task):
-    return json.dumps({'task_name': task.name, 'task_payload': task.payload})
+    return json.dumps({"task_name": task.name, "task_payload": task.payload})
 
 
 def deserialize(message):
     dikt = json.loads(message)
-    return Task(name=dikt['task_name'], payload=dikt['task_payload'])
+    return Task(name=dikt["task_name"], payload=dikt["task_payload"])

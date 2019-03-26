@@ -6,7 +6,7 @@ import json
 logger = logging.getLogger(__name__)
 
 
-class TaskExecutor():
+class TaskExecutor:
     def __init__(self, task_handler_fn):
         self.task_handler_fn = task_handler_fn
 
@@ -30,17 +30,17 @@ class TaskExecutor():
         return True
 
     def _log_start(self, task):
-        logger.info("Processing task", extra={'task_name': task.name})
+        logger.info("Processing task", extra={"task_name": task.name})
 
     def _log_success(self, task):
-        logger.info(
-            "Processed task successfully", extra={'task_name': task.name})
+        logger.info("Processed task successfully", extra={"task_name": task.name})
 
     def _log_exception(self, task, exc):
         logger.error(
             "Failed to process task",
             extra={
-                'exc': str(exc),
-                'task_name': task.name,
-                'task_payload': json.dumps(task.payload)
-            })
+                "exc": str(exc),
+                "task_name": task.name,
+                "task_payload": json.dumps(task.payload),
+            },
+        )

@@ -9,8 +9,13 @@ from simple_worker.task_executor import TaskExecutor
 
 
 class App:
-    def __init__(self, queue_prefix: str = '', testing_mode: bool = False,
-                 sqs_endpoint_url=None, sqs_region=None):
+    def __init__(
+        self,
+        queue_prefix: str = "",
+        testing_mode: bool = False,
+        sqs_endpoint_url=None,
+        sqs_region=None,
+    ):
         """
         `sqs_region`: aws region to use. eg. us-east-1
         `sqs_endpoint_url`: override to use mock server.
@@ -25,10 +30,10 @@ class App:
             self._queue_provider = SQSProvider(
                 queue_prefix=queue_prefix,
                 endpoint_url=sqs_endpoint_url,
-                aws_region=sqs_region
+                aws_region=sqs_region,
             )
 
-    def register_task_handler(self, task_name, queue='default'):
+    def register_task_handler(self, task_name, queue="default"):
         """
         Usage:
 
@@ -70,7 +75,8 @@ class App:
         return Worker(
             queues=queues,
             task_handler_registry=self._task_handler_registry,
-            task_executor_cls=task_executor_cls)
+            task_executor_cls=task_executor_cls,
+        )
 
     def _get_queue(self, queue_name):
         return Queue(self._queue_provider, queue_name)
