@@ -8,12 +8,12 @@ from simple_worker.worker import Worker
 
 
 def test_init():
-    app = App()
+    app = App(sqs_region="dummy")
     assert isinstance(app._queue_provider, SQSProvider)
 
 
 def test_init_with_testing_mode():
-    app = App(testing_mode=True)
+    app = App(sqs_region="dummy", testing_mode=True)
     assert isinstance(app._queue_provider, MemoryProvider)
 
 

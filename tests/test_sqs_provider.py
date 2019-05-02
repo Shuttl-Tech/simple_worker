@@ -44,6 +44,7 @@ def test_ack(provider):
 @pytest.fixture
 def aws_creds():
     os.environ["AWS_SHARED_CREDENTIALS_FILE"] = CREDS_FILE
+    os.environ["AWS_REGION"] = "dummy"
 
     yield
 
