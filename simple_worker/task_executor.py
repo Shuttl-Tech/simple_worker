@@ -19,23 +19,27 @@ class TaskExecutor:
 
     def execute(self, task) -> bool:
         try:
-            self._log_start(task)
+            self.log_start(task)
             with self.context():
                 self.task_handler_fn(**task.payload)
         except Exception as exc:
-            self._log_exception(task, exc)
+            self.failure_handler(task, exc)
             return False
+        else:
+            self.success_handler(task)
+            return True
 
-        self._log_success(task)
-        return True
-
-    def _log_start(self, task):
+    def log_start(self, task):
+        """
+        Override this in a subclass to perform action before starting a task
+        """
         logger.info("Processing task", extra={"task_name": task.name})
 
-    def _log_success(self, task):
-        logger.info("Processed task successfully", extra={"task_name": task.name})
-
-    def _log_exception(self, task, exc):
+    def failure_handler(self, task, exc):
+        """
+        Override this in a subclass to change failure handling
+        Default: Logs Failure message with stacktrace and task info
+        """
         logger.error(
             "Failed to process task",
             extra={
@@ -45,3 +49,10 @@ class TaskExecutor:
             },
             exc_info=True,
         )
+
+    def success_handler(self, task):
+        """
+        Override this in a subclass to change success handling.
+        Default: Logs success message with task name
+        """
+        logger.info("Processed task successfully", extra={"task_name": task.name})
