@@ -43,4 +43,5 @@ class TaskExecutor:
                 "task_name": task.name,
                 "task_payload": json.dumps(task.payload),
             },
+            exc_info=True,
         )
