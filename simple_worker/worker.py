@@ -35,6 +35,7 @@ class Worker:
             queue.ack_task(task_id)
 
     def _reserve_one(self):
+        reserved = False
         for queue in self._queues:
             reserved = queue.reserve_task()
             if reserved:
