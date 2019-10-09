@@ -1,0 +1,33 @@
+---
+kind: pipeline
+name: Default
+
+
+steps:
+  - name: Test
+    image: python:3.7
+    commands:
+      - pip install cython
+      - pip install .[test]
+      - pytest -m "not integration"
+    when:
+      event:
+        - push
+        - tag
+        - pull_request
+
+  - name: Publish
+    image: python:3.7
+    commands:
+      - pip install cython
+      - pip install twine
+      - python setup.py sdist bdist_wheel
+      - twine upload dist/*
+    environment:
+      TWINE_USERNAME:
+        from_secret: TWINE_USERNAME
+      TWINE_PASSWORD:
+        from_secret: TWINE_PASSWORD
+    when:
+      event:
+        - tag
