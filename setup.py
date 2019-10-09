@@ -11,6 +11,6 @@ setup(
     license="MIT",
     packages=find_packages(),
     classifiers=["Programming Language :: Python :: 3.7"],
-    install_requires=["boto3"],
+    install_requires=["boto3", "tenacity"],
     extras_require={"test": ["pytest", "pytest-runner", "pytest-cov", "tenacity"]},
 )
