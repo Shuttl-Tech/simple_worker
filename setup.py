@@ -3,7 +3,7 @@ from setuptools import find_packages
 
 setup(
     name="simple_worker",
-    version="0.2.19",
+    version="0.2.20",
     description="A task queues library that uses AWS SQS",
     url="https://github.com/shuttl-tech/simple_worker",
     author="Paul Kuruvilla",
@@ -11,6 +11,6 @@ setup(
     license="MIT",
     packages=find_packages(),
     classifiers=["Programming Language :: Python :: 3.7"],
-    install_requires=["boto3"],
+    install_requires=["boto3", "tenacity"],
     extras_require={"test": ["pytest", "pytest-runner", "pytest-cov", "tenacity"]},
 )
