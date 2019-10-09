@@ -1,11 +1,19 @@
 import os
+from unittest.mock import patch, MagicMock
+
 import pytest
 import boto3
 import random
 import string
 
+from botocore.exceptions import ClientError
+
 from simple_worker.queue_providers import SQSProvider
-from simple_worker.queue_providers.exceptions import MessageIDNotFound, QueueNotFound
+from simple_worker.queue_providers.exceptions import (
+    MessageIDNotFound,
+    QueueNotFound,
+    InvalidCredentials,
+)
 
 CREDS_FILE = os.path.join(os.getcwd(), "tests", ".aws_credentials")
 
@@ -33,6 +41,21 @@ def test_add_and_reserve(provider):
 def test_queue_not_found_error(provider):
     with pytest.raises(MessageIDNotFound):
         provider.ack("dummy_queue", "invalid")
+
+
+@patch("simple_worker.queue_providers.sqs_provider.boto3")
+def test_retries_for_invalid_credentials(mock_boto):
+    boto_client = MagicMock()
+    boto_client.get_queue_url.side_effect = ClientError(
+        error_response={"Error": {"Code": "InvalidClientTokenId"}},
+        operation_name="get_queue",
+    )
+    mock_boto.client.return_value = boto_client
+    sqs_provider = SQSProvider("simple_worker_tests_%s_" % random_str())
+    with pytest.raises(InvalidCredentials):
+        sqs_provider.add("test_queue", "test_message")
+
+    assert boto_client.get_queue_url.call_count == 3
 
 
 @pytest.mark.integration

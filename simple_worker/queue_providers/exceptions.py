@@ -4,3 +4,7 @@ class MessageIDNotFound(Exception):
 
 class QueueNotFound(Exception):
     pass
+
+
+class InvalidCredentials(Exception):
+    pass
