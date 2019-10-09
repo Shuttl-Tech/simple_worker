@@ -13,6 +13,10 @@ build:
 upload: build
 	twine upload dist/*
 
+release:
+	git tag v$(shell python3 setup.py --version)
+	git push origin v$(shell python3 setup.py --version)
+
 bump_version:
 	bumpversion --current-version $(shell python3 setup.py --version) patch setup.py
 
