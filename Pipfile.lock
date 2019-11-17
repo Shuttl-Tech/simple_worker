@@ -160,11 +160,11 @@
         },
         "tenacity": {
             "hashes": [
-                "sha256:6a7511a59145c2e319b7d04ddd93c12d48cc3d3c8fa42c2846d33a620ee91f57",
-                "sha256:a4eb168dbf55ed2cae27e7c6b2bd48ab54dabaf294177d998330cf59f294c112"
+                "sha256:72f397c2bb1887e048726603f3f629ea16f88cb3e61e4ed3c57e98582b8e3571",
+                "sha256:947e728aedf06e8db665bb7898112e90d17e48cc3f3289784a2b9ccf6e56fabc"
             ],
             "index": "pypi",
-            "version": "==5.1.1"
+            "version": "==6.0.0"
         },
         "wcwidth": {
             "hashes": [
