@@ -41,10 +41,10 @@
         },
         "jmespath": {
             "hashes": [
-                "sha256:3720a4b1bd659dd2eecad0666459b9788813e032b83e7ba58578e48254e0a0e6",
-                "sha256:bde2aef6f44302dfb30320115b17d030798de8c4110e28d5cf6cf91a7a31074c"
+                "sha256:695cb76fa78a10663425d5b73ddc5714eb711157e52704d69be03b1a02ba4fec",
+                "sha256:cca55c8d153173e21baa59983015ad0daf603f9cb799904ff057bfb8ff8dc2d9"
             ],
-            "version": "==0.9.4"
+            "version": "==0.9.5"
         },
         "python-dateutil": {
             "hashes": [
@@ -152,11 +152,11 @@
         },
         "tenacity": {
             "hashes": [
-                "sha256:72f397c2bb1887e048726603f3f629ea16f88cb3e61e4ed3c57e98582b8e3571",
-                "sha256:947e728aedf06e8db665bb7898112e90d17e48cc3f3289784a2b9ccf6e56fabc"
+                "sha256:f7bcbf5bb53875cfc38f61f596a88b1c994af32420f120c4409542a683ad613b",
+                "sha256:fb01d8ef2474eed422d8314a566c9e391cccb6e50cf4585022add6cb5cda66c8"
             ],
             "index": "pypi",
-            "version": "==6.0.0"
+            "version": "==6.1.0"
         },
         "wcwidth": {
             "hashes": [
@@ -167,10 +167,10 @@
         },
         "zipp": {
             "hashes": [
-                "sha256:5c56e330306215cd3553342cfafc73dda2c60792384117893f3a83f8a1209f50",
-                "sha256:d65287feb793213ffe11c0f31b81602be31448f38aeb8ffc2eb286c4f6f6657e"
+                "sha256:12248a63bbdf7548f89cb4c7cda4681e537031eda29c02ea29674bc6854460c2",
+                "sha256:7c0f8e91abc0dc07a5068f315c52cb30c66bfbc581e5b50704c8a2f6ebae794a"
             ],
-            "version": "==2.2.0"
+            "version": "==3.0.0"
         }
     }
 }
