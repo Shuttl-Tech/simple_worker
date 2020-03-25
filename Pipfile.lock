@@ -18,18 +18,18 @@
     "default": {
         "boto3": {
             "hashes": [
-                "sha256:6f113f02f3098b3e37d24caa726a8e81fbc16f6d5cafbf61b7d285b9f7e104e9",
-                "sha256:af09a4f3254fcf6a781ad1a700f702ce15526a25ebe96a14f5cd2ec46e9d924c"
+                "sha256:6f3b532babb42b2c193a288420ad1e2e0bd3af6e9fc10547fdd3589c16d402ad",
+                "sha256:f31e10348909dd4dbe0e75ecd695a78c13dc4b49712cf90048a9e0ae80a4a84d"
             ],
             "index": "pypi",
-            "version": "==1.12.28"
+            "version": "==1.12.29"
         },
         "botocore": {
             "hashes": [
-                "sha256:21674f491f6bdc886179de644d00dec05276fac292117f86685513006d83fe0a",
-                "sha256:74f81aca90cdbe084bcfa19589bd2c6470bb47dd1fd9635bf5484ecf7577fd61"
+                "sha256:7bcae36b3b9449b2137069701e7a877980d63bc331f6c6d77d2c7db42202ebe5",
+                "sha256:d49caf1dae7dd903c2af443dbafd76dcf3902d87236a83f8b64e77aa556d1c6b"
             ],
-            "version": "==1.15.28"
+            "version": "==1.15.29"
         },
         "docutils": {
             "hashes": [
@@ -94,11 +94,11 @@
         },
         "importlib-metadata": {
             "hashes": [
-                "sha256:06f5b3a99029c7134207dd882428a66992a9de2bef7c2b699b5641f9886c3302",
-                "sha256:b97607a1a18a5100839aec1dc26a1ea17ee0d93b20b0f008d80a5a050afb200b"
+                "sha256:0095bf45caca7a93685cbb9e5ef49f0ed37f848639df8f4684f07229aa7a8322",
+                "sha256:dd381cddc02a58a23667ef675164ad70848d82966d3a8fddea96dcfb51064803"
             ],
             "markers": "python_version < '3.8'",
-            "version": "==1.5.0"
+            "version": "==1.5.1"
         },
         "more-itertools": {
             "hashes": [
