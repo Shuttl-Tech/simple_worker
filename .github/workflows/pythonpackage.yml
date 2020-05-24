@@ -37,7 +37,7 @@ jobs:
         python -m black --check .
     - name: Test with pytest
       run: |
-        pytest
+        pytest -m 'not integration'
     - name: Test coverage
       run: |
         python3 -m pytest --cov=. --cov-fail-under=85 -m 'not integration'
