@@ -13,9 +13,15 @@ build:
 upload: build
 	twine upload dist/*
 
-release:
+push_tag:
 	git tag v$(shell python3 setup.py --version)
 	git push origin v$(shell python3 setup.py --version)
+
+release:
+	curl --data '{"tag_name": "v$(shell python3 setup.py --version)"}' "https://api.github.com/repos/Shuttl-Tech/simple_worker/releases?access_token=${GITHUB_TOKEN}"
+
+push_tag_and_release:
+	push_tag release
 
 bump_version:
 	bumpversion --current-version $(shell python3 setup.py --version) patch setup.py

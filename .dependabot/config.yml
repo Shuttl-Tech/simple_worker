@@ -1,0 +1,14 @@
+
+version: 1
+update_configs:
+  - package_manager: python
+    directory: /
+    update_schedule: weekly
+    target_branch: master
+    automerged_updates:
+        - match:
+            dependency_type: development
+            update_type: semver:minor
+        - match:
+            dependency_type: production
+            update_type: semver:minor
